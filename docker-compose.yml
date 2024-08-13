@@ -1,0 +1,35 @@
+services:
+  frontend:
+    container_name: xllm-app-frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3006:3006"
+    environment:
+      - NODE_ENV=production
+      - PORT=3006
+    expose:
+      - 3006
+    depends_on:
+      - backend
+    networks:
+      - xllm-app-network
+
+  backend:
+    container_name: xllm-app-backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8906:8906"
+    expose:
+      - 8906
+    networks:
+      - xllm-app-network
+
+networks:
+  xllm-app-network:
+    name: xllm-app-network
