@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { FormType } from "@/lib/utils/types";
 import { useState } from "react";
 import OptionButton from "./OptionButton";
+import Button from "./Button";
 
 function ParamForm() {
   const { register, handleSubmit } = useForm<FormType>();
@@ -11,7 +12,7 @@ function ParamForm() {
     setSelectedOption(option);
   };
   return (
-    <div className="container">
+    <div className="container p-2 border border-slate-600 rounded-md">
       <h2 className="text-slate-100 mb-3 text-center">Parameters</h2>
       <form className="w-full" action="">
         <fieldset className="border rounded-md border-slate-600 p-2 mb-3">
@@ -98,7 +99,7 @@ function ParamForm() {
             />
           </div>
         </div>
-        <div className="flex flex-wrap mb-4 px-3">
+        <div className="flex flex-col mb-4 px-3">
           <label
             className="text-cyan-600 text-sm"
             htmlFor="ContextMultitokenMinSize"
@@ -130,18 +131,8 @@ function ParamForm() {
           </div>
         )}
         <div className="flex flex-row justify-center gap-4 px-3">
-          <button
-            type="submit"
-            className="bg-slate-800 btn btn-primary text-sm text-slate-300"
-          >
-            Submit
-          </button>
-          <button
-            type="reset"
-            className="bg-slate-800 btn text-sm text-slate-300"
-          >
-            Reset
-          </button>
+          <Button buttonType="submit">Retrieve Docs</Button>
+          <Button buttonType="button">Reset</Button>
         </div>
       </form>
     </div>
