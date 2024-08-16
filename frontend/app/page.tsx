@@ -9,7 +9,7 @@ function HomePage() {
         <ParamForm />
       </div>
       {/* Right Container */}
-      <div className="w-full lg:w-2/3 lg:p-8 overflow-y-auto h-screen mt-4">
+      <div className="w-full lg:w-2/3 lg:p-8 overflow-y-auto h-screen mt-3">
         <Output />
       </div>
     </div>

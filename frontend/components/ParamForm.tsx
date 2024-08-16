@@ -113,6 +113,18 @@ function ParamForm() {
             className="bg-slate-800 text-slate-300 text-sm rounded-md w-40 p-1"
           />
         </div>
+        {/* <div className="flex flex-col mb-4 px-3">
+          <label className="text-cyan-600 text-sm" htmlFor="queryText">
+            Query
+          </label>
+          <input
+            type="number"
+            {...register("queryText", { required: true })}
+            value=""
+            placeholder="parameterized datasets map tables sql server"
+            className="bg-slate-800 text-slate-300 text-sm rounded-md w-40 p-1"
+          />
+        </div> */}
         <OptionButton
           handleOptionButtonClick={handleOptionButtonClick}
           selectedOption={selectedOption}
