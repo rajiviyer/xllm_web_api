@@ -12,8 +12,10 @@ export interface FormType {
 }
 
 export interface OptionButtonProps {
-  handleOptionButtonClick: (data: string) => void;
-  selectedOption: string;
+  handleOptionButtonClick: (data: boolean) => void;
+  selectedOption: boolean;
+  option1: string;
+  option2: string;
 }
 
 export interface CardProps {

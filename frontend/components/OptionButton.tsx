@@ -5,28 +5,29 @@ import { OptionButtonProps } from "@/lib/utils/types";
 const OptionButton: React.FC<OptionButtonProps> = ({
   handleOptionButtonClick,
   selectedOption,
+  option1,
+  option2,
 }) => {
   return (
-    <div className="px-3">
-      <div className="flex flex-wrap items-center space-x-4 mb-4 bg-slate-800 rounded-md px-1">
-        <label className="text-cyan-600 text-sm">Bypass Ignore List</label>
+    <div>
+      <div className="flex flex-wrap items-center gap-x-2 mb-4 bg-slate-800 rounded-md">
         <button
           type="button"
-          onClick={() => handleOptionButtonClick("yes")}
-          className={`flex-auto px-4 py-1 mx-2 my-2 rounded text-white text-sm ${
-            selectedOption === "yes" ? "bg-slate-900" : "bg-slate-800"
+          onClick={() => handleOptionButtonClick(!selectedOption)}
+          className={`flex-auto px-2 py-1 mx-2 my-2 rounded text-white text-xs ${
+            selectedOption ? "bg-slate-900" : "bg-slate-800"
           }`}
         >
-          Yes
+          {option1}
         </button>
         <button
           type="button"
-          onClick={() => handleOptionButtonClick("no")}
-          className={`flex-auto px-4 py-1 mx-2 my-2 rounded text-white text-sm ${
-            selectedOption === "no" ? "bg-slate-900 " : "bg-slate-800"
+          onClick={() => handleOptionButtonClick(!selectedOption)}
+          className={`flex-auto px-2 py-1 mx-2 my-2 rounded text-white text-xs ${
+            !selectedOption ? "bg-slate-900 " : "bg-slate-800"
           }`}
         >
-          No
+          {option2}
         </button>
       </div>
     </div>

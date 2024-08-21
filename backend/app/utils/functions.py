@@ -161,9 +161,9 @@ def process_docs(q_dictionary, q_embeddings, frontendParams)->dict:
         print()  
     return {"status":"Docs processed"}  
     
-def get_docs(form_params: frontendParamsType, 
-             query: str) -> List[dict]:
+def get_docs(form_params: frontendParamsType) -> List[dict]:
 
+    query = form_params['query']
     query = query.split(' ')
     query.sort() 
     q_embeddings = {} 

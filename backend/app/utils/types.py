@@ -9,7 +9,8 @@ class frontendParamsType(TypedDict):
     ContextMultitokenMinSize: int
     minOutputListSize: int
     bypassIgnoreList: int
-    ignoreList: tuple    
+    ignoreList: tuple
+    query: str
 # frontendParamsType = TypedDict("frontendParamsType", 
 #                                {
 #                                 "embeddingKeyMinSize": int,
