@@ -2,14 +2,18 @@
 import { useForm } from "react-hook-form";
 import { FormType } from "@/lib/utils/types";
 import { useState } from "react";
+import React from "react";
 import OptionButton from "./OptionButton";
 import Button from "./Button";
 import { queries } from "@/lib/utils/data";
+import { ResultDocProps } from "@/lib/utils/types";
 
-function ParamForm() {
+const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
   const { register, handleSubmit } = useForm<FormType>();
   const [byPassList, setByPassList] = useState(false);
-  const [seedQuery, setSeedQuery] = useState(false);
+  const [seedQuery, setSeedQuery] = useState(true);
+  const [ignoreListText, setIgnoreListText] = useState("data,");
+  const [queryText, setQueryText] = useState("");
   const handleOptionButtonClickIgnoreList = (option: boolean) => {
     console.log("bypass", option);
     setByPassList(option);
@@ -20,10 +24,47 @@ function ParamForm() {
     setSeedQuery(option);
   };
 
+  const handleChangeIL = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setIgnoreListText(event.target.value);
+  };
+
+  const handleChangeQT = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setQueryText(event.target.value);
+  };
+
+  const retrieveDocs = async (data: Object) => {
+    data = { ...data, bypassIgnoreList: byPassList ? 1 : 0 };
+    if (data) {
+      console.log(data);
+    } else {
+      console.log("No data found");
+    }
+    try {
+      const response = await fetch("http://77.237.241.186:8906/api/docs", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      const result_data = await response.json();
+      // print length of the result list
+
+      if (result_data) {
+        console.log(result_data.length);
+        setResult(result_data);
+      } else {
+        console.log("No result found");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="container p-2 border border-slate-600 rounded-md">
       <h2 className="text-slate-100 mb-3 text-center">Parameters</h2>
-      <form className="w-full" action="">
+      <form onSubmit={handleSubmit(retrieveDocs)} className="w-full">
         <fieldset className="border rounded-md border-slate-600 p-2 mb-3">
           <legend className="text-green-400 text-xs">Embedding</legend>
           <div className="flex flex-wrap">
@@ -108,7 +149,7 @@ function ParamForm() {
             />
           </div>
         </div>
-        <div className="flex flex-wrap mb-2">
+        <div className="flex flex-wrap mb-3">
           <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
             <label
               className="text-cyan-600 text-xs"
@@ -142,13 +183,14 @@ function ParamForm() {
               </label>
               <textarea
                 {...register("ignoreList", { required: true })}
-                value="data,"
+                value={ignoreListText}
+                onChange={handleChangeIL}
                 className="bg-slate-800 text-slate-300 text-xs rounded-md w-40 p-1"
               />
             </div>
           )}
         </div>
-        <div className="flex flex-wrap mb-4">
+        <div className="flex flex-wrap mb-2">
           <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
             <label className="text-cyan-600 text-xs">Query</label>
             <OptionButton
@@ -180,6 +222,7 @@ function ParamForm() {
               <textarea
                 {...register("queryText", { required: true })}
                 value=""
+                onChange={handleChangeQT}
                 placeholder="parameterized datasets map tables sql server"
                 className="bg-slate-800 text-slate-300 text-xs rounded-md w-40 p-1"
               />
@@ -193,5 +236,5 @@ function ParamForm() {
       </form>
     </div>
   );
-}
+};
 export default ParamForm;

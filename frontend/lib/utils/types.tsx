@@ -1,14 +1,14 @@
 export interface FormType {
-  embeddingKeyMinSize: 0;
-  embeddingValuesMinSize: 0;
-  min_pmi: 0;
-  nABmin: 0;
-  Customized_pmi: 0;
-  ContextMultitokenMinSize: 0;
-  minOutputListSize: 0;
-  queryText: "";
-  bypassIgnoreList: 1;
-  ignoreList: ["data"];
+  embeddingKeyMinSize: number;
+  embeddingValuesMinSize: number;
+  min_pmi: number;
+  nABmin: number;
+  Customized_pmi: number;
+  ContextMultitokenMinSize: number;
+  minOutputListSize: number;
+  queryText: string;
+  bypassIgnoreList: number;
+  ignoreList: ReadonlyArray<string>;
 }
 
 export interface OptionButtonProps {
@@ -18,8 +18,22 @@ export interface OptionButtonProps {
   option2: string;
 }
 
+// export interface CardProps {
+//   category: string;
+//   title: string;
+//   tags: string;
+//   description: string;
+// }
+
 export interface CardProps {
+  doc: Doc;
+}
+export interface Doc {
   category: string;
   title: string;
+  tags: string;
   description: string;
+}
+export interface ResultDocProps {
+  setResult: (result: Doc[]) => void;
 }

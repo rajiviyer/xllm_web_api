@@ -2,12 +2,35 @@
 import "./Card.css";
 import React from "react";
 import { CardProps } from "@/lib/utils/types";
-const Card: React.FC<CardProps> = ({ category, title, description }) => {
+import Button from "./Button";
+import Link from "next/link";
+import { useState } from "react";
+const Card: React.FC<CardProps> = ({ doc }) => {
+  const [isTooltipVisible, setIsTooltipVisible] = useState(false);
+  const { category, title, tags, description } = doc;
+  // Function to open the modal
   return (
-    <div className="card">
-      <h4>{category}</h4>
-      <p>{title}</p>
-      <p>{description}</p>
+    <div
+      className="card"
+      onMouseEnter={() => setIsTooltipVisible(true)}
+      onMouseLeave={() => setIsTooltipVisible(false)}
+    >
+      <h4>
+        <b>Category: </b>
+        {category}
+      </h4>
+      <p>
+        <b>Title: </b>
+        {title}
+      </p>
+      <p>
+        <b>Tags: </b>
+        {tags}
+      </p>
+      {/* <Link href="#" onClick={() => onOpenModal(doc)}>
+        <Button buttonType="button">Show Description</Button>
+      </Link> */}
+      {isTooltipVisible && <div className="tooltip">{description}</div>}
       <div className="shine"></div>
       <div className="background">
         <div className="tiles">

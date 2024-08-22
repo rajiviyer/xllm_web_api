@@ -162,8 +162,8 @@ def process_docs(q_dictionary, q_embeddings, frontendParams)->dict:
     return {"status":"Docs processed"}  
     
 def get_docs(form_params: frontendParamsType) -> List[dict]:
-
-    query = form_params['query']
+    print("form_params", form_params)
+    query = form_params['queryText']
     query = query.split(' ')
     query.sort() 
     q_embeddings = {} 
@@ -224,7 +224,12 @@ def get_docs(form_params: frontendParamsType) -> List[dict]:
         for item in local_hash:
             if label == 'whole':
                 result_dict = ast.literal_eval(item.split("~~")[1])
-                result.append(result_dict)
+                result.append({
+                    "category":result_dict["category_text"],
+                    "title":result_dict["title_text"],
+                    "tags": ", ".join([tag.strip() for tag in result_dict['tags_list_text']]),
+                    "description":result_dict["description_text"]
+                })
             hash2 = local_hash[item]
             if len(hash2) >= form_params['minOutputListSize']:
                 print("   %s: %s [%d entries]" % (label, item, len(hash2))) 

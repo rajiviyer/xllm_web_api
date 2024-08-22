@@ -10,7 +10,7 @@ const OptionButton: React.FC<OptionButtonProps> = ({
 }) => {
   return (
     <div>
-      <div className="flex flex-wrap items-center gap-x-2 mb-4 bg-slate-800 rounded-md">
+      <div className="flex flex-wrap items-center gap-x-2 bg-slate-800 rounded-md">
         <button
           type="button"
           onClick={() => handleOptionButtonClick(!selectedOption)}
