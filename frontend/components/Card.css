@@ -77,8 +77,8 @@ body {
 .tooltip {
   position: absolute;
   top: 50%; /* Position below the card */
-  left: 50%;
-  transform: translateX(-50%);
+  /* left: 50%; */
+  transform: translateX(-3%);
   background-color: rgba(0, 0, 0, 0.8);
   color: white;
   padding: 10px;
@@ -93,8 +93,8 @@ body {
   content: "";
   position: absolute;
   top: -5px; /* Position arrow above the tooltip */
-  left: 50%;
-  transform: translateX(-50%);
+  /* left: 50%; */
+  transform: translateX(-3%);
   border-width: 5px;
   border-style: solid;
   border-color: transparent transparent rgba(0, 0, 0, 0.8) transparent;

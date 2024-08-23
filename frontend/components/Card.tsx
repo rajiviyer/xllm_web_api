@@ -16,15 +16,15 @@ const Card: React.FC<CardProps> = ({ doc }) => {
       onMouseLeave={() => setIsTooltipVisible(false)}
     >
       <h4>
-        <b>Category: </b>
+        <b className="text-viridian uppercase">Category: </b>
         {category}
       </h4>
       <p>
-        <b>Title: </b>
+        <b className="text-princeton_orange uppercase">Title: </b>
         {title}
       </p>
       <p>
-        <b>Tags: </b>
+        <b className="text-mountbatten_pink uppercase">Tags: </b>
         {tags}
       </p>
       {/* <Link href="#" onClick={() => onOpenModal(doc)}>

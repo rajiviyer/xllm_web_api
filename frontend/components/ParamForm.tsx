@@ -12,25 +12,58 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
   const { register, handleSubmit } = useForm<FormType>();
   const [byPassList, setByPassList] = useState(false);
   const [seedQuery, setSeedQuery] = useState(true);
-  const [ignoreListText, setIgnoreListText] = useState("data,");
-  const [queryText, setQueryText] = useState("");
+  // const [formValues, setFormValues] = useState();
+
+  // const handleInputChange = (
+  //   event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  // ) => {
+  //   setFormData({
+  //     ...formData,
+  //     [event.target.name]: event.target.value,
+  //   });
+  // };
+  const [formData, setFormData] = useState({
+    embeddingKeyMinSize: "2",
+    embeddingValuesMinSize: "2",
+    min_pmi: "0.00",
+    Customized_pmi: "1",
+    ContextMultitokenMinSize: "2",
+    minOutputListSize: "1",
+    nABmin: "1",
+    ignoreList: "data,",
+    queryText: "",
+  });
+
+  const handleInputChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = event.target;
+    console.log(name, value);
+
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+  };
+  // const [ignoreListText, setIgnoreListText] = useState("data,");
+  // const [queryText, setQueryText] = useState("");
   const handleOptionButtonClickIgnoreList = (option: boolean) => {
-    console.log("bypass", option);
+    // console.log("bypass", option);
     setByPassList(option);
   };
 
   const handleOptionButtonClickQuery = (option: boolean) => {
-    console.log("query", option);
+    // console.log("query", option);
     setSeedQuery(option);
   };
 
-  const handleChangeIL = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setIgnoreListText(event.target.value);
-  };
+  // const handleChangeIL = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+  //   setIgnoreListText(event.target.value);
+  // };
 
-  const handleChangeQT = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setQueryText(event.target.value);
-  };
+  // const handleChangeQT = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+  //   setQueryText(event.target.value);
+  // };
 
   const retrieveDocs = async (data: Object) => {
     data = { ...data, bypassIgnoreList: byPassList ? 1 : 0 };
@@ -62,7 +95,7 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
   };
 
   return (
-    <div className="container p-2 border border-slate-600 rounded-md">
+    <div className="container p-1 border border-slate-600 rounded-md">
       <h2 className="text-slate-100 mb-3 text-center">Parameters</h2>
       <form onSubmit={handleSubmit(retrieveDocs)} className="w-full">
         <fieldset className="border rounded-md border-slate-600 p-2 mb-3">
@@ -78,7 +111,9 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
               <input
                 type="number"
                 {...register("embeddingKeyMinSize", { required: true })}
-                value="2"
+                value={formData.embeddingKeyMinSize}
+                // placeholder="2"
+                onChange={(event) => handleInputChange(event)}
                 className="bg-slate-800 text-slate-300 text-xs rounded-md w-40 p-1"
               />
             </div>
@@ -92,7 +127,9 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
               <input
                 type="number"
                 {...register("embeddingValuesMinSize", { required: true })}
-                value="2"
+                value={formData.embeddingValuesMinSize}
+                onChange={(event) => handleInputChange(event)}
+                // placeholder="2"
                 className="bg-slate-800 text-slate-300 text-xs rounded-md w-40 p-1"
               />
             </div>
@@ -106,7 +143,9 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
             <input
               type="number"
               {...register("min_pmi", { required: true })}
-              value="0.00"
+              value={formData.min_pmi}
+              onChange={(event) => handleInputChange(event)}
+              // placeholder="0.00"
               className="bg-slate-800 text-slate-300 text-xs rounded-md w-40 p-1"
             />
           </div>
@@ -117,7 +156,9 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
             <input
               type="number"
               {...register("Customized_pmi", { required: true })}
-              value="1"
+              value={formData.Customized_pmi}
+              onChange={(event) => handleInputChange(event)}
+              // placeholder="1"
               className="bg-slate-800 text-slate-300 text-xs rounded-md w-40 p-1"
             />
           </div>
@@ -133,7 +174,9 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
             <input
               type="number"
               {...register("minOutputListSize", { required: true })}
-              value="1"
+              value={formData.minOutputListSize}
+              onChange={(event) => handleInputChange(event)}
+              // value="1"
               className="bg-slate-800 text-slate-300 text-xs rounded-md w-40 p-1"
             />
           </div>
@@ -144,7 +187,9 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
             <input
               type="number"
               {...register("nABmin", { required: true })}
-              value="1"
+              value={formData.nABmin}
+              onChange={(event) => handleInputChange(event)}
+              // placeholder="1"
               className="bg-slate-800 text-slate-300 text-xs rounded-md w-40 p-1"
             />
           </div>
@@ -160,7 +205,9 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
             <input
               type="number"
               {...register("ContextMultitokenMinSize", { required: true })}
-              value="2"
+              value={formData.ContextMultitokenMinSize}
+              onChange={(event) => handleInputChange(event)}
+              // placeholder="2"
               className="bg-slate-800 text-slate-300 text-xs rounded-md w-40 p-1"
             />
           </div>
@@ -183,14 +230,15 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
               </label>
               <textarea
                 {...register("ignoreList", { required: true })}
-                value={ignoreListText}
-                onChange={handleChangeIL}
+                value={formData.ignoreList}
+                onChange={(event) => handleInputChange(event)}
+                placeholder="data,.."
                 className="bg-slate-800 text-slate-300 text-xs rounded-md w-40 p-1"
               />
             </div>
           )}
         </div>
-        <div className="flex flex-wrap mb-2">
+        <div className="flex flex-wrap mb-3">
           <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
             <label className="text-cyan-600 text-xs">Query</label>
             <OptionButton
@@ -205,7 +253,7 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
               <br />
               <select
                 {...register("queryText", { required: true })}
-                className="bg-slate-800 text-slate-300 text-xs h-1/2 rounded-md w-40 p-1"
+                className="bg-slate-800 text-slate-300 text-xs h-2/3 rounded-md w-40 p-1"
               >
                 {queries.map((query, index) => {
                   return (
@@ -221,9 +269,9 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
               <br />
               <textarea
                 {...register("queryText", { required: true })}
-                value=""
-                onChange={handleChangeQT}
-                placeholder="parameterized datasets map tables sql server"
+                value={formData.queryText}
+                onChange={(event) => handleInputChange(event)}
+                placeholder="parameterized datasets map tables sql server..."
                 className="bg-slate-800 text-slate-300 text-xs rounded-md w-40 p-1"
               />
             </div>

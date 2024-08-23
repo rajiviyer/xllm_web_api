@@ -2,6 +2,7 @@ import Card from "./Card";
 import { Doc } from "@/lib/utils/types";
 // import "./Output.css";
 function Output({ result }: { result: Doc[] }) {
+  const nResult: number = result.length;
   // const [selectedDoc, setSelectedDoc] = useState<Doc | null>(null);
   // const openModal = (doc: Doc) => {
   //   console.log("clicked");
@@ -16,7 +17,7 @@ function Output({ result }: { result: Doc[] }) {
 
   return (
     <div>
-      <h2 className="text-slate-100 mb-6 text-center">XLLM Web App</h2>
+      {nResult > 0 && <h2 className="text-slate-100 mb-6 text-center">Docs</h2>}
       <div className="flex flex-wrap gap-4 justify-center relative z-[1]">
         {result.map((doc, index) => {
           return <Card key={index} doc={doc} />;
