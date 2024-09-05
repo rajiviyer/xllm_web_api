@@ -5,6 +5,7 @@ export interface FormType {
   nABmin: number;
   Customized_pmi: number;
   ContextMultitokenMinSize: number;
+  maxTokenCount: number;
   minOutputListSize: number;
   queryText: string;
   bypassIgnoreList: number;
@@ -27,12 +28,15 @@ export interface OptionButtonProps {
 
 export interface CardProps {
   doc: Doc;
+  onClick: () => void; // Prop for handling card clicks
 }
 export interface Doc {
   category: string;
   title: string;
   tags: string;
   description: string;
+  modified_date: string;
+  link_list_text: string;
 }
 export interface ResultDocProps {
   setResult: (result: Doc[]) => void;

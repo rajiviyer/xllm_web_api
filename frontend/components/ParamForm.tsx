@@ -7,6 +7,7 @@ import OptionButton from "./OptionButton";
 import Button from "./Button";
 import { queries } from "@/lib/utils/data";
 import { ResultDocProps } from "@/lib/utils/types";
+import { Slider } from "@/components/ui/slider";
 
 const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
   const { register, handleSubmit } = useForm<FormType>();
@@ -28,6 +29,7 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
     min_pmi: "0.00",
     Customized_pmi: "1",
     ContextMultitokenMinSize: "2",
+    maxTokenCount: "100",
     minOutputListSize: "1",
     nABmin: "1",
     ignoreList: "data,",
@@ -95,10 +97,11 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
   };
 
   return (
-    <div className="container p-1 border border-slate-600 rounded-md">
+    <div className="container p-1 border border-slate-600 rounded-md mt-2">
       <h2 className="text-slate-100 mb-3 text-center">Parameters</h2>
+      {/* <Slider defaultValue={[33]} max={100} step={1} className="bg-white" /> */}
       <form onSubmit={handleSubmit(retrieveDocs)} className="w-full">
-        <fieldset className="border rounded-md border-slate-600 p-2 mb-3">
+        <fieldset className="border rounded-md border-slate-600 p-2 mb-2">
           <legend className="text-green-400 text-xs">Embedding</legend>
           <div className="flex flex-wrap">
             <div className="w-full md:w-1/2 px-2 mb-6 md:mb-0">
@@ -135,7 +138,7 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
             </div>
           </div>
         </fieldset>
-        <div className="flex flex-wrap mb-4">
+        <div className="flex flex-wrap mb-3">
           <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
             <label className="text-cyan-600 text-xs" htmlFor="min_pmi">
               Min. PMI
@@ -163,7 +166,7 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
             />
           </div>
         </div>
-        <div className="flex flex-wrap mb-4">
+        <div className="flex flex-wrap mb-3">
           <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
             <label
               className="text-cyan-600 text-xs"
@@ -194,7 +197,7 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
             />
           </div>
         </div>
-        <div className="flex flex-wrap mb-3">
+        <div className="flex flex-wrap mb-2">
           <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
             <label
               className="text-cyan-600 text-xs"
@@ -211,9 +214,20 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
               className="bg-slate-800 text-slate-300 text-xs rounded-md w-40 p-1"
             />
           </div>
-          <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0"></div>
+          <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+            <label className="text-cyan-600 text-xs" htmlFor="maxTokenCount">
+              Max. Token Count
+            </label>
+            <input
+              type="number"
+              {...register("maxTokenCount", { required: true })}
+              value={formData.maxTokenCount}
+              onChange={(event) => handleInputChange(event)}
+              className="bg-slate-800 text-slate-300 text-xs rounded-md w-40 p-1"
+            />
+          </div>
         </div>
-        <div className="flex flex-wrap mb-2">
+        <div className="flex flex-wrap mb-1">
           <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
             <label className="text-cyan-600 text-xs">Bypass Ignore List</label>
             <OptionButton
@@ -238,7 +252,7 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
             </div>
           )}
         </div>
-        <div className="flex flex-wrap mb-3">
+        <div className="flex flex-wrap mb-5">
           <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
             <label className="text-cyan-600 text-xs">Query</label>
             <OptionButton

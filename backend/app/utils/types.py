@@ -8,6 +8,7 @@ class frontendParamsType(TypedDict):
     minOutputListSize: int
     nABmin: int
     ContextMultitokenMinSize: int
+    maxTokenCount: int
     ignoreList: str
     queryText: str
     bypassIgnoreList: int

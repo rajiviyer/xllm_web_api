@@ -20,15 +20,16 @@ sample_queries = (
 
 sectionLabels = { 
     # map section label (in output) to corresponding backend table name
-    'dict' :'dictionary', 
-    'pairs':'hash_pairs', 
-    'category':'hash_context1', 
-    'tags'  :'hash_context2', 
-    'titles':'hash_context3', 
-    'descr.':'hash_context4', 
-    'meta'  :'hash_context5',
+    'Dict' :'dictionary', 
+    'Pairs':'hash_pairs', 
+    'Category':'hash_context1', 
+    'Tags'  :'hash_context2', 
+    'Titles':'hash_context3', 
+    'Descr.':'hash_context4', 
+    'Meta'  :'hash_context5',
     'ID'    :'hash_ID',
-    'whole' :'full_content'
+    'Agents': 'hash_agents',
+    'Whole' :'full_content'
 }
 
 with open(f"{DATA_DIR}/{DATAFILE}", "rb") as file:

@@ -103,77 +103,117 @@ def custom_pmi(word: str, token: str) -> float:
     
 #     return(sorted_ngrams)    
 
-def process_docs(q_dictionary, q_embeddings, frontendParams)->dict:
-    hash_pairs = backendTables['hash_pairs']
-    dictionary = backendTables['dictionary']
-    ctokens = backendTables['ctokens']
+# def process_docs(q_dictionary, q_embeddings, frontendParams)->dict:
+#     hash_pairs = backendTables['hash_pairs']
+#     dictionary = backendTables['dictionary']
+#     ctokens = backendTables['ctokens']
     
-    local_hash = {}  # used to not show same token 2x (linked to 2 different words)     
-    q_embeddings = dict(sorted(q_embeddings.items(),key=lambda item: item[1],reverse=True))
+#     local_hash = {}  # used to not show same token 2x (linked to 2 different words)     
+#     q_embeddings = dict(sorted(q_embeddings.items(),key=lambda item: item[1],reverse=True))
 
-    for key in q_embeddings:
-        word  = key[0]
-        token = key[1]
-        pmi = q_embeddings[key]
-        ntk1 = len(word.split('~'))
-        ntk2 = len(token.split('~'))
-        flag = " "
-        nAB = 0
-        keyAB = (word, token)
-        if word > token:
-            keyAB = (token, word)
-        if  keyAB in hash_pairs:
-            nAB = hash_pairs[keyAB]
-        if keyAB in ctokens:
-            flag = '*'
-        if (  ntk1 >= frontendParams['embeddingKeyMinSize'] and 
-              ntk2 >= frontendParams['embeddingValuesMinSize'] and
-              pmi >= frontendParams['min_pmi'] and 
-              nAB >= frontendParams['nABmin'] and
-              token not in local_hash and word not in ignore
-            ):
-            print("%3d %4.2f %1s %s %s" 
-                      %(nAB,pmi,flag,token.ljust(35),word.ljust(35)))
-            local_hash[token] = 1 # token marked as displayed, won't be showed again
+#     for key in q_embeddings:
+#         word  = key[0]
+#         token = key[1]
+#         pmi = q_embeddings[key]
+#         ntk1 = len(word.split('~'))
+#         ntk2 = len(token.split('~'))
+#         flag = " "
+#         nAB = 0
+#         keyAB = (word, token)
+#         if word > token:
+#             keyAB = (token, word)
+#         if  keyAB in hash_pairs:
+#             nAB = hash_pairs[keyAB]
+#         if keyAB in ctokens:
+#             flag = '*'
+#         if (  ntk1 >= frontendParams['embeddingKeyMinSize'] and 
+#               ntk2 >= frontendParams['embeddingValuesMinSize'] and
+#               pmi >= frontendParams['min_pmi'] and 
+#               nAB >= frontendParams['nABmin'] and
+#               token not in local_hash and word not in ignore
+#             ):
+#             print("%3d %4.2f %1s %s %s" 
+#                       %(nAB,pmi,flag,token.ljust(35),word.ljust(35)))
+#             local_hash[token] = 1 # token marked as displayed, won't be showed again
     
 
-    local_hash = {}
+#     local_hash = {}
 
-    for label in ('category','tags','titles','descr.','ID','whole'):
-        tableName = sectionLabels[label]
-        table = backendTables[tableName]
-        local_hash = {}
-        # print(">>> RESULTS - SECTION: %s\n" % (label))
-        for word in q_dictionary:  
-            ntk3 =  len(word.split('~'))
-            if word not in ignore and ntk3 >= frontendParams['ContextMultitokenMinSize']: 
-                content = table[word]   # content is a hash
-                count = int(dictionary[word])
-                for item in content:
-                    update_nestedHash(local_hash, item, word, count)
-        for item in local_hash:
-            hash2 = local_hash[item]
-            if len(hash2) >= frontendParams['minOutputListSize']:
-                print("   %s: %s [%d entries]" % (label, item, len(hash2))) 
-                for key in hash2:
-                    print("   Linked to: %s (%s)" %(key, hash2[key]))
-                print()
-        print()  
-    return {"status":"Docs processed"}  
+#     for label in ('category','tags','titles','descr.','ID','whole'):
+#         tableName = sectionLabels[label]
+#         table = backendTables[tableName]
+#         local_hash = {}
+#         # print(">>> RESULTS - SECTION: %s\n" % (label))
+#         for word in q_dictionary:  
+#             ntk3 =  len(word.split('~'))
+#             if word not in ignore and ntk3 >= frontendParams['ContextMultitokenMinSize']: 
+#                 content = table[word]   # content is a hash
+#                 count = int(dictionary[word])
+#                 for item in content:
+#                     update_nestedHash(local_hash, item, word, count)
+#         for item in local_hash:
+#             hash2 = local_hash[item]
+#             if len(hash2) >= frontendParams['minOutputListSize']:
+#                 print("   %s: %s [%d entries]" % (label, item, len(hash2))) 
+#                 for key in hash2:
+#                     print("   Linked to: %s (%s)" %(key, hash2[key]))
+#                 print()
+#         print()  
+#     return {"status":"Docs processed"}
+
+# [4.2] Purge function 
+
+def distill_frontendTables(q_dictionary, q_embeddings, form_params):
+    # purge q_dictionary then q_embeddings (frontend tables) 
+    
+    maxTokenCount = form_params['maxTokenCount']
+    local_hash = {}    
+    for key in q_dictionary:
+        if q_dictionary[key] > maxTokenCount:
+            local_hash[key] = 1
+    for keyA in q_dictionary:
+        for keyB in q_dictionary:
+            nA = q_dictionary[keyA]
+            nB = q_dictionary[keyB]
+            if keyA != keyB:
+                if (keyA in keyB and nA == nB) or (keyA in keyB.split('~')):
+                    local_hash[keyA] = 1
+    for key in local_hash:
+        del q_dictionary[key]  
+
+    local_hash = {}    
+    for key in q_embeddings: 
+        if key[0] not in q_dictionary:
+            local_hash[key] = 1
+    for key in local_hash:
+        del q_embeddings[key] 
+  
+    return(q_dictionary, q_embeddings)
     
 def get_docs(form_params: frontendParamsType) -> List[dict]:
     print("form_params", form_params)
-    query = form_params['queryText']
-    query = query.split(' ')
-    query.sort() 
-    q_embeddings = {} 
-    q_dictionary = {} 
-    
     # hash_pairs = backendTables['hash_pairs']
     dictionary = backendTables['dictionary']
     # ctokens = backendTables['ctokens']
     embeddings = backendTables["embeddings"]
     sorted_ngrams = backendTables["sorted_ngrams"]
+    KW_map = backendTables["KW_map"]
+        
+    query = form_params['queryText']
+    query = query.split(' ')
+    ### New Code
+    new_query = []
+    for k in range(len(query)):
+        token = query[k].lower()
+        if token in KW_map: 
+            token = KW_map[token]
+        if token in dictionary:
+            new_query.append(token)
+    query = new_query.copy()    
+    ### New Code
+    query.sort() 
+    q_embeddings = {} 
+    q_dictionary = {} 
 
     for k in range(1, 2**len(query)): 
 
@@ -201,41 +241,68 @@ def get_docs(form_params: frontendParamsType) -> List[dict]:
                                 pmi = custom_pmi(word, token)
                             q_embeddings[(word, token)] = pmi        
     
-    if len(query) == 1:
-        # single-token query
-        form_params['embeddingKeyMinSize'] = 1
-        form_params['ContextMultitokenMinSize'] = 1
-        
+    ## New Code
+    distill_frontendTables(q_dictionary,q_embeddings,form_params) 
+    ## New Code
+    
     local_hash = {}
+    agentAndWord_to_IDs = {}
     result = []
+    label = 'Whole'
+    tableName = sectionLabels[label]
+    table = backendTables[tableName]
+    local_hash = {}
+    print(">>> RESULTS - SECTION: %s\n" % (label))
+    
+    for word in q_dictionary:
+        ntk3 =  len(word.split('~'))
+        if word not in ignore and ntk3 >= \
+            form_params['ContextMultitokenMinSize']: 
+            content = table[word]   # content is a hash
+            count = int(dictionary[word])
+            for item in content:
+                update_nestedHash(local_hash, item, word, count)
+                
+    for item in local_hash:
+        result_dict = ast.literal_eval(item.split("~~")[1])
+        print(f"Result: {result_dict}")
+        result.append({
+            "category":result_dict["category_text"],
+            "title":result_dict["title_text"],
+            "tags": ", ".join([tag.strip() for tag in result_dict['tags_list_text']]),
+            "description":result_dict["description_text"],
+            "modified_date":result_dict["Modified Date"] if "Modified Date" in result_dict else "",
+            "link_list_text": result_dict["link_list_text"] if "link_list_text" in result_dict else "",
+        })
 
-    for label in ('category','tags','titles','descr.','ID','whole'):
-        tableName = sectionLabels[label]
-        table = backendTables[tableName]
-        local_hash = {}
-        print(">>> RESULTS - SECTION: %s\n" % (label))
-        for word in q_dictionary:  
-            ntk3 =  len(word.split('~'))
-            if word not in ignore and ntk3 >= form_params['ContextMultitokenMinSize']: 
-                content = table[word]   # content is a hash
-                count = int(dictionary[word])
-                for item in content:
-                    update_nestedHash(local_hash, item, word, count)
-        for item in local_hash:
-            if label == 'whole':
-                result_dict = ast.literal_eval(item.split("~~")[1])
-                result.append({
-                    "category":result_dict["category_text"],
-                    "title":result_dict["title_text"],
-                    "tags": ", ".join([tag.strip() for tag in result_dict['tags_list_text']]),
-                    "description":result_dict["description_text"]
-                })
-            hash2 = local_hash[item]
-            if len(hash2) >= form_params['minOutputListSize']:
-                print("   %s: %s [%d entries]" % (label, item, len(hash2))) 
-                for key in hash2:
-                    print("   Linked to: %s (%s)" %(key, hash2[key]))
-                print()
-        print()
+    # for label in ('Category','Tags','Titles','Descr.',
+    #               'ID','Agents','Whole'):
+        # tableName = sectionLabels[label]
+        # table = backendTables[tableName]
+        # local_hash = {}
+        # print(">>> RESULTS - SECTION: %s\n" % (label))
+        # for word in q_dictionary:  
+        #     ntk3 =  len(word.split('~'))
+        #     if word not in ignore and ntk3 >= form_params['ContextMultitokenMinSize']: 
+        #         content = table[word]   # content is a hash
+        #         count = int(dictionary[word])
+        #         for item in content:
+        #             update_nestedHash(local_hash, item, word, count)
+        # for item in local_hash:
+        #     if label == 'whole':
+        #         result_dict = ast.literal_eval(item.split("~~")[1])
+        #         result.append({
+        #             "category":result_dict["category_text"],
+        #             "title":result_dict["title_text"],
+        #             "tags": ", ".join([tag.strip() for tag in result_dict['tags_list_text']]),
+        #             "description":result_dict["description_text"]
+        #         })
+        #     hash2 = local_hash[item]
+        #     if len(hash2) >= form_params['minOutputListSize']:
+        #         print("   %s: %s [%d entries]" % (label, item, len(hash2))) 
+        #         for key in hash2:
+        #             print("   Linked to: %s (%s)" %(key, hash2[key]))
+        #         print()
+        # print()
     return result
 

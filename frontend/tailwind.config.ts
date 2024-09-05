@@ -26,6 +26,8 @@ const config: Config = {
         cal_polygreen: "#2C5530",
         viridian: "#668F80",
         princeton_orange: "#FF9933",
+        atomic_tangerine: "#F79F79",
+        sunset: "#F7D08A",
       },
     },
     plugins: [],

@@ -5,7 +5,7 @@ import { CardProps } from "@/lib/utils/types";
 import Button from "./Button";
 import Link from "next/link";
 import { useState } from "react";
-const Card: React.FC<CardProps> = ({ doc }) => {
+const Card: React.FC<CardProps> = ({ doc, onClick }) => {
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
   const { category, title, tags, description } = doc;
   // Function to open the modal
@@ -14,24 +14,25 @@ const Card: React.FC<CardProps> = ({ doc }) => {
       className="card"
       onMouseEnter={() => setIsTooltipVisible(true)}
       onMouseLeave={() => setIsTooltipVisible(false)}
+      onClick={onClick} // Clicking the card opens the modal
     >
-      <h4>
-        <b className="text-viridian uppercase">Category: </b>
-        {category}
-      </h4>
-      <p>
-        <b className="text-princeton_orange uppercase">Title: </b>
-        {title}
-      </p>
-      <p>
-        <b className="text-mountbatten_pink uppercase">Tags: </b>
-        {tags}
-      </p>
+      <div className="title">{title}</div>
+      <div className="category">{category}</div>
+      <div className="tags">
+        {tags.split(",").map(
+          (tag) =>
+            tag.trim() !== "" && (
+              <span key={tag} className="tag">
+                {tag}
+              </span>
+            )
+        )}
+      </div>
       {/* <Link href="#" onClick={() => onOpenModal(doc)}>
         <Button buttonType="button">Show Description</Button>
       </Link> */}
       {isTooltipVisible && <div className="tooltip">{description}</div>}
-      <div className="shine"></div>
+      {/* <div className="shine"></div>
       <div className="background">
         <div className="tiles">
           <div className="tile tile-1"></div>
@@ -51,7 +52,7 @@ const Card: React.FC<CardProps> = ({ doc }) => {
         <div className="line line-1"></div>
         <div className="line line-2"></div>
         <div className="line line-3"></div>
-      </div>
+      </div> */}
     </div>
   );
 };

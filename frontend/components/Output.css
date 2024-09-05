@@ -13,30 +13,34 @@
 
 /* Modal styling */
 .modal {
-  background: grey;
-  padding: 20px;
-  border-radius: 8px;
+  @apply bg-slate-800 p-[20px] rounded-[8px];
+  /* padding: 20px;
+  border-radius: 8px; */
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   width: 400px;
 }
 
-.modal h2 {
+.modal-content {
+  @apply text-slate-200 text-sm mt-2;
+}
+/* .modal h2 {
   margin-top: 0;
 }
 
 .modal p {
-  color: #333;
-}
+  color: white;
+} */
 
-/* .modal button {
+.modal button {
   background-color: #007bff;
   color: white;
   border: none;
   padding: 10px;
   border-radius: 5px;
   cursor: pointer;
-} */
+  font-size: x-small;
+}
 
-/* .modal button:hover {
+.modal button:hover {
   background-color: #0056b3;
-} */
+}
