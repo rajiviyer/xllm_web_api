@@ -3,6 +3,7 @@ from .params import (get_bin, ignore, sample_queries,
 from .types import frontendParamsType
 from typing import Optional, List
 import ast
+from datetime import datetime
     
 def update_hash(hash, key, count=1):
     if key in hash:
@@ -271,8 +272,12 @@ def get_docs(form_params: frontendParamsType) -> List[dict]:
             "title":result_dict["title_text"],
             "tags": ", ".join([tag.strip() for tag in result_dict['tags_list_text']]),
             "description":result_dict["description_text"],
-            "modified_date":result_dict["Modified Date"] if "Modified Date" in result_dict else "",
+            "modified_date":datetime.strptime(
+                result_dict["Modified Date"], 
+                "%Y-%m-%dT%H:%M:%S.%fZ"
+                ).strftime("%Y-%m-%d %I:%M %p") if "Modified Date" in result_dict else "",
             "link_list_text": result_dict["link_list_text"] if "link_list_text" in result_dict else "",
+            "likes_list_text": result_dict["likes_list_text"] if "likes_list_text" in result_dict else "",            
         })
 
     # for label in ('Category','Tags','Titles','Descr.',

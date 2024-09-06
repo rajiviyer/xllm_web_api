@@ -9,7 +9,8 @@ function HomePage() {
     <div className="flex flex-col lg:flex-row">
       {/* <div>Test</div> */}
       {/* Left Container */}
-      <div className="w-full lg:w-1/3 px-4 pt-1 flex flex-col items-center lg:sticky top-16 h-auto lg:h-screen mt-2">
+      <div className="w-full lg:w-1/3 px-4 pt-1 flex flex-col overflow-y-auto items-center mt-2">
+        {/* lg:sticky top-16 h-auto lg:h-screen */}
         <ParamForm setResult={setResult} />
       </div>
       {/* Right Container */}

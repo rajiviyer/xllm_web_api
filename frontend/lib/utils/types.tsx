@@ -13,7 +13,7 @@ export interface FormType {
 }
 
 export interface OptionButtonProps {
-  handleOptionButtonClick: (data: boolean) => void;
+  handleOptionButtonClick: (option: boolean) => void;
   selectedOption: boolean;
   option1: string;
   option2: string;
@@ -37,6 +37,7 @@ export interface Doc {
   description: string;
   modified_date: string;
   link_list_text: string;
+  likes_list_text: string;
 }
 export interface ResultDocProps {
   setResult: (result: Doc[]) => void;

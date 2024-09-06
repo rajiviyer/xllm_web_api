@@ -15,7 +15,7 @@ sample_queries = (
                     'eventhub files blob storage single parquet',
                     'parquet blob eventhub more files less storage single table',
                     'MLTxQuest Data Assets Detailed Information page'
-                    'stellar', 'table',
+                    'stellar table',
                  )
 
 sectionLabels = { 

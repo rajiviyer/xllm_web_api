@@ -8,22 +8,18 @@ import Button from "./Button";
 import { queries } from "@/lib/utils/data";
 import { ResultDocProps } from "@/lib/utils/types";
 import { Slider } from "@/components/ui/slider";
+import Link from "next/link";
 
 const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
   const { register, handleSubmit } = useForm<FormType>();
   const [byPassList, setByPassList] = useState(false);
   const [seedQuery, setSeedQuery] = useState(true);
-  // const [formValues, setFormValues] = useState();
 
-  // const handleInputChange = (
-  //   event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  // ) => {
-  //   setFormData({
-  //     ...formData,
-  //     [event.target.name]: event.target.value,
-  //   });
-  // };
-  const [formData, setFormData] = useState({
+  // State to track the height of the textarea
+  const [heightIgnoreList, setHeightIgnoreList] = useState<string>("auto");
+  const [heightQueryText, setHeightQueryText] = useState<string>("auto");
+
+  const defaultFormData = {
     embeddingKeyMinSize: "2",
     embeddingValuesMinSize: "2",
     min_pmi: "0.00",
@@ -33,11 +29,14 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
     minOutputListSize: "1",
     nABmin: "1",
     ignoreList: "data,",
-    queryText: "",
-  });
+    queryText: queries[0],
+  };
+  const [formData, setFormData] = useState(defaultFormData);
 
   const handleInputChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = event.target;
     console.log(name, value);
@@ -47,8 +46,7 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
       [name]: value,
     }));
   };
-  // const [ignoreListText, setIgnoreListText] = useState("data,");
-  // const [queryText, setQueryText] = useState("");
+
   const handleOptionButtonClickIgnoreList = (option: boolean) => {
     // console.log("bypass", option);
     setByPassList(option);
@@ -59,13 +57,34 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
     setSeedQuery(option);
   };
 
-  // const handleChangeIL = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-  //   setIgnoreListText(event.target.value);
-  // };
+  const handleResetButtonClick = () => {
+    setFormData(defaultFormData);
+    setResult([]);
+    setByPassList(false);
+    setSeedQuery(true);
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      queryText: queries[0],
+    }));
+  };
 
-  // const handleChangeQT = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-  //   setQueryText(event.target.value);
-  // };
+  // Handle focus event to increase the height
+  const handleFocusIgnoreList = () => {
+    setHeightIgnoreList("150px");
+  };
+
+  const handleFocusQueryText = () => {
+    setHeightQueryText("150px");
+  };
+
+  // Handle blur event to reset the height
+  const handleBlurIgnoreList = () => {
+    setHeightIgnoreList("auto"); // Reset to original size (or you can specify a fixed height)
+  };
+
+  const handleBlurQueryText = () => {
+    setHeightQueryText("auto"); // Reset to original size (or you can specify a fixed height)
+  };
 
   const retrieveDocs = async (data: Object) => {
     data = { ...data, bypassIgnoreList: byPassList ? 1 : 0 };
@@ -86,7 +105,7 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
       // print length of the result list
 
       if (result_data) {
-        console.log(result_data.length);
+        // console.log(result_data.length);
         setResult(result_data);
       } else {
         console.log("No result found");
@@ -247,7 +266,11 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
                 value={formData.ignoreList}
                 onChange={(event) => handleInputChange(event)}
                 placeholder="data,.."
-                className="bg-slate-800 text-slate-300 text-xs rounded-md w-40 p-1"
+                // className="bg-slate-800 text-slate-300 text-xs rounded-md w-40 p-1"
+                className="bg-slate-800 text-slate-300 text-xs rounded-md w-40 p-1 transition-all duration-300 ease-in-out"
+                style={{ height: `${heightIgnoreList}` }} // Apply dynamic height
+                onFocus={handleFocusIgnoreList}
+                onBlur={handleBlurIgnoreList}
               />
             </div>
           )}
@@ -268,6 +291,7 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
               <select
                 {...register("queryText", { required: true })}
                 className="bg-slate-800 text-slate-300 text-xs h-2/3 rounded-md w-40 p-1"
+                onChange={(event) => handleInputChange(event)}
               >
                 {queries.map((query, index) => {
                   return (
@@ -286,14 +310,20 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
                 value={formData.queryText}
                 onChange={(event) => handleInputChange(event)}
                 placeholder="parameterized datasets map tables sql server..."
-                className="bg-slate-800 text-slate-300 text-xs rounded-md w-40 p-1"
+                // className="bg-slate-800 text-slate-300 text-xs rounded-md w-40 p-1"
+                className="bg-slate-800 text-slate-300 text-xs rounded-md w-40 p-1 transition-all duration-300 ease-in-out"
+                style={{ height: `${heightQueryText}` }} // Apply dynamic height
+                onFocus={handleFocusQueryText}
+                onBlur={handleBlurQueryText}
               />
             </div>
           )}
         </div>
         <div className="flex flex-row justify-center gap-4 px-3">
           <Button buttonType="submit">Retrieve Docs</Button>
-          <Button buttonType="button">Reset</Button>
+          <Link href="/" onClick={handleResetButtonClick}>
+            <Button buttonType="button">Reset</Button>
+          </Link>
         </div>
       </form>
     </div>

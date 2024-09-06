@@ -18,7 +18,14 @@ function Output({ result }: { result: Doc[] }) {
 
   return (
     <div>
-      {nResult > 0 && <h2 className="text-slate-100 mb-6 text-center">Docs</h2>}
+      {nResult > 0 && (
+        <div>
+          <h2 className="text-slate-100 mb-3 text-center">Docs</h2>
+          <p className="text-slate-100 mb-6 text-center text-xs italic">
+            * Click on a card to see more details
+          </p>
+        </div>
+      )}
       <div className="flex flex-wrap gap-4 align-middle relative z-[1]">
         {result.map((doc, index) => {
           return <Card key={index} doc={doc} onClick={() => openModal(doc)} />;
@@ -46,16 +53,18 @@ function Output({ result }: { result: Doc[] }) {
                 <span className="text-sunset font-bold">Modified Date: </span>
                 {selectedDoc.modified_date}
               </p>
-              {selectedDoc.link_list_text && (
+              {selectedDoc.link_list_text?.length > 0 && (
                 <p className="modal-content">
                   <span className="text-sunset font-bold">Links: </span>
                   {selectedDoc.link_list_text}
                 </p>
               )}
-              {/* <p className="modal-content">
-                <span className="text-sunset font-bold">Links: </span>
-                {selectedDoc.link_list_text}
-              </p> */}
+              {selectedDoc.likes_list_text && (
+                <p className="modal-content">
+                  <span className="text-sunset font-bold">Likes: </span>
+                  {selectedDoc.likes_list_text}
+                </p>
+              )}
               <button className="mt-4" onClick={closeModal}>
                 Close
               </button>
