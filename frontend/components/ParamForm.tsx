@@ -59,7 +59,7 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
 
   const handleResetButtonClick = () => {
     setFormData(defaultFormData);
-    setResult([]);
+    setResult({ embeddings: [], docs: [] });
     setByPassList(false);
     setSeedQuery(true);
     setFormData((prevFormData) => ({

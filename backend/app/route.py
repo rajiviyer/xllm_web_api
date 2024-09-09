@@ -16,16 +16,16 @@ app.add_middleware(
 )
 
 
-@app.get("/")
-def home():
-    return f"""
-            Dictionary size: {len(backendTables['dictionary'])}\n
-            Hash pairs size: {len(backendTables['hash_pairs'])}\n
-            Ctokens size: {len(backendTables['ctokens'])}
-        """
+# @app.get("/")
+# def home():
+#     return f"""
+#             Dictionary size: {len(backendTables['dictionary'])}\n
+#             Hash pairs size: {len(backendTables['hash_pairs'])}\n
+#             Ctokens size: {len(backendTables['ctokens'])}
+#         """
 @app.post("/api/docs")
 def get_docs(docs: Annotated[dict, Depends(get_docs)]):
-    print(docs)
+    print("Successfully retrieved docs")
     return docs
 # @app.post("/api/signup")
 # def user_signup(user_token_data: Annotated[dict, Depends(sign_up)]):

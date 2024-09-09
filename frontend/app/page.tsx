@@ -2,9 +2,9 @@
 import ParamForm from "@/components/ParamForm";
 import Output from "@/components/Output";
 import { useState } from "react";
-import { Doc } from "@/lib/utils/types";
+import { Doc, DataProps } from "@/lib/utils/types";
 function HomePage() {
-  const [result, setResult] = useState<Doc[]>([]);
+  const [result, setResult] = useState<DataProps>({ embeddings: [], docs: [] });
   return (
     <div className="flex flex-col lg:flex-row">
       {/* <div>Test</div> */}
