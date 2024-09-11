@@ -4,7 +4,7 @@ class frontendParamsType(TypedDict):
     embeddingKeyMinSize: int
     embeddingValuesMinSize: int
     min_pmi: float
-    Customized_pmi: int
+    Customized_pmi: bool
     minOutputListSize: int
     nABmin: int
     ContextMultitokenMinSize: int

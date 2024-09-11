@@ -14,12 +14,12 @@ function Navbar() {
           </span>
         </a>
         <div className="flex pr-6 md:order-2 space-x-5 md:space-x-0 rtl:space-x-reverse">
-          <Link href="https://mltblog.com/3WcTS9C" className="py-1">
+          <Link href="https://mltblog.com/4dNPSnB" className="py-1">
             <button
               type="button"
               className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-1 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
-              Article
+              Documentation
             </button>
           </Link>
         </div>

@@ -14,6 +14,7 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
   const { register, handleSubmit } = useForm<FormType>();
   const [byPassList, setByPassList] = useState(false);
   const [seedQuery, setSeedQuery] = useState(true);
+  const [customPMI, setCustomPMI] = useState(true);
 
   // State to track the height of the textarea
   const [heightIgnoreList, setHeightIgnoreList] = useState<string>("auto");
@@ -23,7 +24,7 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
     embeddingKeyMinSize: "2",
     embeddingValuesMinSize: "2",
     min_pmi: "0.00",
-    Customized_pmi: "1",
+    Customized_pmi: true,
     ContextMultitokenMinSize: "2",
     maxTokenCount: "100",
     minOutputListSize: "1",
@@ -47,6 +48,10 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
     }));
   };
 
+  const handleOptionButtonClickCustomPMI = (option: boolean) => {
+    // console.log("custom pmi", option);
+    setCustomPMI(option);
+  };
   const handleOptionButtonClickIgnoreList = (option: boolean) => {
     // console.log("bypass", option);
     setByPassList(option);
@@ -60,6 +65,7 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
   const handleResetButtonClick = () => {
     setFormData(defaultFormData);
     setResult({ embeddings: [], docs: [] });
+    setCustomPMI(true);
     setByPassList(false);
     setSeedQuery(true);
     setFormData((prevFormData) => ({
@@ -87,7 +93,12 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
   };
 
   const retrieveDocs = async (data: Object) => {
-    data = { ...data, bypassIgnoreList: byPassList ? 1 : 0 };
+    data = {
+      ...data,
+      bypassIgnoreList: byPassList ? 1 : 0,
+      Customized_pmi: customPMI,
+    };
+
     if (data) {
       console.log(data);
     } else {
@@ -157,7 +168,7 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
             </div>
           </div>
         </fieldset>
-        <div className="flex flex-wrap mb-3">
+        <div className="flex flex-wrap mb-2">
           <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
             <label className="text-cyan-600 text-xs" htmlFor="min_pmi">
               Min. PMI
@@ -175,17 +186,23 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
             <label className="text-cyan-600 text-xs" htmlFor="Customized_pmi">
               Custom PMI
             </label>
-            <input
+            <OptionButton
+              handleOptionButtonClick={handleOptionButtonClickCustomPMI}
+              selectedOption={customPMI}
+              option1="Yes"
+              option2="No"
+            />
+            {/* <input
               type="number"
               {...register("Customized_pmi", { required: true })}
               value={formData.Customized_pmi}
               onChange={(event) => handleInputChange(event)}
               // placeholder="1"
               className="bg-slate-800 text-slate-300 text-xs rounded-md w-40 p-1"
-            />
+            /> */}
           </div>
         </div>
-        <div className="flex flex-wrap mb-3">
+        <div className="flex flex-wrap mb-2">
           <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
             <label
               className="text-cyan-600 text-xs"
@@ -246,7 +263,7 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
             />
           </div>
         </div>
-        <div className="flex flex-wrap mb-1">
+        <div className="flex flex-wrap">
           <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
             <label className="text-cyan-600 text-xs">Bypass Ignore List</label>
             <OptionButton

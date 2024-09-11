@@ -46,7 +46,7 @@ body {
       var(--card-box-shadow-2),
     0 0 0 1px var(--card-border-color);
   width: 240px; /* Fixed width */
-  height: 240px; /* Fixed height */
+  height: 280px; /* Fixed height */
   display: inline-block;
   vertical-align: top;
   position: relative; /* Required for tooltip positioning */

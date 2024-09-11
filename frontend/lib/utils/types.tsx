@@ -3,7 +3,7 @@ export interface FormType {
   embeddingValuesMinSize: number;
   min_pmi: number;
   nABmin: number;
-  Customized_pmi: number;
+  Customized_pmi: boolean;
   ContextMultitokenMinSize: number;
   maxTokenCount: number;
   minOutputListSize: number;

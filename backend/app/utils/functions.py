@@ -246,7 +246,7 @@ def get_docs(form_params: frontendParamsType) -> dict[List[dict], List[dict]]:
                     if word in embeddings:
                         embedding = embeddings[word]
                         for token in embedding:
-                            if form_params['Customized_pmi'] == 0:
+                            if form_params['Customized_pmi']:
                                 pmi = embedding[token]
                             else:
                                 # customized pmi
@@ -271,7 +271,7 @@ def get_docs(form_params: frontendParamsType) -> dict[List[dict], List[dict]]:
         flag = " "
         nAB = 0
         keyAB = (word, token)
-        print("keyAB", keyAB)
+        # print("keyAB", keyAB)
 
         if word > token:
             keyAB = (token, word)
@@ -279,7 +279,7 @@ def get_docs(form_params: frontendParamsType) -> dict[List[dict], List[dict]]:
             nAB = hash_pairs[keyAB]
         if keyAB in ctokens:
             flag = '*'
-        print(f"keyab: {keyAB} ,nAB:{nAB}, flag: {flag}")
+        # print(f"keyab: {keyAB} ,nAB:{nAB}, flag: {flag}")
         if (  ntk1 >= form_params['embeddingKeyMinSize'] and 
             ntk2 >= form_params['embeddingValuesMinSize'] and
             pmi >= form_params['min_pmi'] and 
