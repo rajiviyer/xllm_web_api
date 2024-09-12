@@ -329,6 +329,7 @@ def get_docs(form_params: frontendParamsType) -> dict[List[dict], List[dict]]:
         ID = ast.literal_eval(item.split("~~")[0])
         result_dict = ast.literal_eval(item.split("~~")[1])
         # print(f"Result: {result_dict}")
+        print(f"nEmbeddings: {len(doc_embeddings)}, nDocs: {len(docs)}")
         docs.append({
             "id": ID,
             "agent":list(ID_to_agents[ID].keys())[0] if ID in ID_to_agents else "",

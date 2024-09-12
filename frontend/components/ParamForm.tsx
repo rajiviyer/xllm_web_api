@@ -63,15 +63,17 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
   };
 
   const handleResetButtonClick = () => {
-    setFormData(defaultFormData);
-    setResult({ embeddings: [], docs: [] });
-    setCustomPMI(true);
-    setByPassList(false);
-    setSeedQuery(true);
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      queryText: queries[0],
-    }));
+    window.location.reload(); // Refresh the page
+
+    // setFormData(defaultFormData);
+    // setResult({ embeddings: [], docs: [] });
+    // setCustomPMI(true);
+    // setByPassList(false);
+    // setSeedQuery(true);
+    // setFormData((prevFormData) => ({
+    //   ...prevFormData,
+    //   queryText: queries[0],
+    // }));
   };
 
   // Handle focus event to increase the height
@@ -92,9 +94,10 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
     setHeightQueryText("auto"); // Reset to original size (or you can specify a fixed height)
   };
 
-  const retrieveDocs = async (data: Object) => {
-    data = {
-      ...data,
+  // const retrieveDocs = async (data: Object) => {
+  const retrieveDocs = async () => {
+    const data = {
+      ...formData,
       bypassIgnoreList: byPassList ? 1 : 0,
       Customized_pmi: customPMI,
     };
@@ -105,7 +108,8 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
       console.log("No data found");
     }
     try {
-      const response = await fetch("http://77.237.241.186:8906/api/docs", {
+      const url = process.env.NEXT_PUBLIC_API_URL;
+      const response = await fetch(`${url}/api/docs`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -145,7 +149,9 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
                 type="number"
                 {...register("embeddingKeyMinSize", { required: true })}
                 value={formData.embeddingKeyMinSize}
-                // placeholder="2"
+                min="1"
+                max="3"
+                step="1"
                 onChange={(event) => handleInputChange(event)}
                 className="bg-slate-800 text-slate-300 text-xs rounded-md w-40 p-1"
               />
@@ -162,7 +168,9 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
                 {...register("embeddingValuesMinSize", { required: true })}
                 value={formData.embeddingValuesMinSize}
                 onChange={(event) => handleInputChange(event)}
-                // placeholder="2"
+                min="1"
+                max="3"
+                step="1"
                 className="bg-slate-800 text-slate-300 text-xs rounded-md w-40 p-1"
               />
             </div>
@@ -178,7 +186,9 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
               {...register("min_pmi", { required: true })}
               value={formData.min_pmi}
               onChange={(event) => handleInputChange(event)}
-              // placeholder="0.00"
+              min="0.00"
+              max="2.00"
+              step="0.01"
               className="bg-slate-800 text-slate-300 text-xs rounded-md w-40 p-1"
             />
           </div>
@@ -192,14 +202,6 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
               option1="Yes"
               option2="No"
             />
-            {/* <input
-              type="number"
-              {...register("Customized_pmi", { required: true })}
-              value={formData.Customized_pmi}
-              onChange={(event) => handleInputChange(event)}
-              // placeholder="1"
-              className="bg-slate-800 text-slate-300 text-xs rounded-md w-40 p-1"
-            /> */}
           </div>
         </div>
         <div className="flex flex-wrap mb-2">
@@ -215,7 +217,9 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
               {...register("minOutputListSize", { required: true })}
               value={formData.minOutputListSize}
               onChange={(event) => handleInputChange(event)}
-              // value="1"
+              min="1"
+              max="2"
+              step="1"
               className="bg-slate-800 text-slate-300 text-xs rounded-md w-40 p-1"
             />
           </div>
@@ -228,7 +232,9 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
               {...register("nABmin", { required: true })}
               value={formData.nABmin}
               onChange={(event) => handleInputChange(event)}
-              // placeholder="1"
+              min="1"
+              max="3"
+              step="1"
               className="bg-slate-800 text-slate-300 text-xs rounded-md w-40 p-1"
             />
           </div>
@@ -246,7 +252,9 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
               {...register("ContextMultitokenMinSize", { required: true })}
               value={formData.ContextMultitokenMinSize}
               onChange={(event) => handleInputChange(event)}
-              // placeholder="2"
+              min="1"
+              max="3"
+              step="1"
               className="bg-slate-800 text-slate-300 text-xs rounded-md w-40 p-1"
             />
           </div>
@@ -258,6 +266,9 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
               type="number"
               {...register("maxTokenCount", { required: true })}
               value={formData.maxTokenCount}
+              min="5"
+              max="200"
+              step="1"
               onChange={(event) => handleInputChange(event)}
               className="bg-slate-800 text-slate-300 text-xs rounded-md w-40 p-1"
             />
@@ -283,7 +294,6 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
                 value={formData.ignoreList}
                 onChange={(event) => handleInputChange(event)}
                 placeholder="data,.."
-                // className="bg-slate-800 text-slate-300 text-xs rounded-md w-40 p-1"
                 className="bg-slate-800 text-slate-300 text-xs rounded-md w-40 p-1 transition-all duration-300 ease-in-out"
                 style={{ height: `${heightIgnoreList}` }} // Apply dynamic height
                 onFocus={handleFocusIgnoreList}
@@ -327,7 +337,6 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
                 value={formData.queryText}
                 onChange={(event) => handleInputChange(event)}
                 placeholder="parameterized datasets map tables sql server..."
-                // className="bg-slate-800 text-slate-300 text-xs rounded-md w-40 p-1"
                 className="bg-slate-800 text-slate-300 text-xs rounded-md w-40 p-1 transition-all duration-300 ease-in-out"
                 style={{ height: `${heightQueryText}` }} // Apply dynamic height
                 onFocus={handleFocusQueryText}

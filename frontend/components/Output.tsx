@@ -7,6 +7,10 @@ function Output({ result }: { result: DataProps }) {
 
   const nResult: number = docs.length;
   const embeddingsData: Embeddings[] = result["embeddings"];
+  const nEmbeddings: number = embeddingsData.length;
+  console.log("nEmbeddings", nEmbeddings);
+  console.log("nResult", nResult);
+
   // console.log("embeddingsData", embeddingsData);
 
   const [selectedDoc, setSelectedDoc] = useState<Doc | null>(null);
@@ -15,37 +19,6 @@ function Output({ result }: { result: DataProps }) {
   // Embeddings toggle state
   const [isEmbeddingsExpanded, setIsEmbeddingsExpanded] = useState(false);
 
-  // // Example array of embeddings
-  // const embeddingsData = [
-  //   {
-  //     n: 1,
-  //     pmi: 1.0,
-  //     f: "*",
-  //     token: "confidentiality~availability",
-  //     word: "information~assets",
-  //   },
-  //   {
-  //     n: 1,
-  //     pmi: 1.0,
-  //     f: "*",
-  //     token: "availability~organization",
-  //     word: "information~assets",
-  //   },
-  //   {
-  //     n: 1,
-  //     pmi: 1.0,
-  //     f: "*",
-  //     token: "confidentiality~availability~organization",
-  //     word: "information~assets",
-  //   },
-  //   {
-  //     n: 1,
-  //     pmi: 1.0,
-  //     f: "",
-  //     token: "availability~organization~information",
-  //     word: "information~assets",
-  //   },
-  // ];
   const openModal = (doc: Doc) => {
     console.log("clicked");
 
@@ -75,12 +48,16 @@ function Output({ result }: { result: DataProps }) {
         <div>
           <h2 className="text-slate-100 mb-3 text-center">Docs</h2>
           {/* Button to toggle embeddings container */}
-          <button onClick={toggleEmbeddings} className="embeddings-btn">
+          {nEmbeddings > 0 && (
+            <button onClick={toggleEmbeddings} className="embeddings-btn">
+              {isEmbeddingsExpanded ? "Hide Embeddings" : "Show Embeddings"}
+            </button>
+          )}
+          {/* <button onClick={toggleEmbeddings} className="embeddings-btn">
             {isEmbeddingsExpanded ? "Hide Embeddings" : "Show Embeddings"}
-          </button>
-
+          </button> */}
           {/* Expandable container for embeddings data */}
-          {isEmbeddingsExpanded && (
+          {nEmbeddings > 0 && isEmbeddingsExpanded && (
             <div className="embeddings-container">
               <table className="embeddings-table">
                 <thead>
