@@ -15,6 +15,7 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
   const [byPassList, setByPassList] = useState(false);
   const [seedQuery, setSeedQuery] = useState(true);
   const [customPMI, setCustomPMI] = useState(true);
+  const [isDebugTooltipVisible, setIsDebugTooltipVisible] = useState(false);
 
   // State to track the height of the textarea
   const [heightIgnoreList, setHeightIgnoreList] = useState<string>("auto");
@@ -32,6 +33,20 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
     ignoreList: "data,",
     queryText: queries[0],
   };
+
+  const minFormData = {
+    embeddingKeyMinSize: "1",
+    embeddingValuesMinSize: "1",
+    min_pmi: "0.00",
+    Customized_pmi: true,
+    ContextMultitokenMinSize: "1",
+    maxTokenCount: "100",
+    minOutputListSize: "1",
+    nABmin: "1",
+    ignoreList: "data,",
+    queryText: queries[0],
+  };
+
   const [formData, setFormData] = useState(defaultFormData);
 
   const handleInputChange = (
@@ -74,6 +89,24 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
     //   ...prevFormData,
     //   queryText: queries[0],
     // }));
+  };
+
+  const showDebugTooltip = () => {
+    setIsDebugTooltipVisible(true);
+  };
+
+  const hideDebugTooltip = () => {
+    setIsDebugTooltipVisible(false);
+  };
+
+  const handleDebugButtonClick = () => {
+    console.log(`Debug formdata: ${JSON.stringify(formData)}`); // Log the formData);
+    console.log(`Debug minformdata: ${JSON.stringify(minFormData)}`); // Log the minformData);
+    setFormData(() => ({
+      ...minFormData,
+      queryText:
+        formData.queryText?.length > 0 ? formData.queryText : queries[0],
+    }));
   };
 
   // Handle focus event to increase the height
@@ -347,9 +380,30 @@ const ParamForm: React.FC<ResultDocProps> = ({ setResult }) => {
         </div>
         <div className="flex flex-row justify-center gap-4 px-3">
           <Button buttonType="submit">Retrieve Docs</Button>
-          <Link href="/" onClick={handleResetButtonClick}>
-            <Button buttonType="button">Reset</Button>
-          </Link>
+          {/* <Link href="/" passHref onClick={handleResetButtonClick}> */}
+          <Button buttonType="button" onClick={handleResetButtonClick}>
+            Reset
+          </Button>
+          {/* </Link> */}
+          <div className="relative inline-block group">
+            <Button buttonType="button" onClick={handleDebugButtonClick}>
+              Debug
+            </Button>
+            <div
+              id="tooltip-debug"
+              data-tooltip-placement="top"
+              className="absolute z-50 invisible opacity-0 group-hover:visible group-hover:opacity-100 break-words rounded-lg bg-black py-1.5 px-3 font-sans text-sm font-normal text-white top-[-60px] left-[-40px] transform transition-opacity duration-300 w-40"
+            >
+              Debug resets numeric inputs to their minimum values.
+            </div>
+          </div>
+          {/* <Link
+            href="/"
+            passHref
+            onClick={handleDebugButtonClick}
+            className="relative inline-block group"
+          > */}
+          {/* </Link> */}
         </div>
       </form>
     </div>
