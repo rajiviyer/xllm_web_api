@@ -14,7 +14,10 @@ function Navbar() {
           </span>
         </a>
         <div className="flex pr-6 md:order-2 space-x-5 md:space-x-0 rtl:space-x-reverse">
-          <Link href="https://mltblog.com/4dNPSnB" className="py-1">
+          <Link
+            href="https://mltechniques.com/2024/09/22/no-code-llm-fine-tuning-and-debugging-in-real-time-case-study/"
+            className="py-1"
+          >
             <button
               type="button"
               className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-1 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
